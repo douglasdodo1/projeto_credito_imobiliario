@@ -1,3 +1,28 @@
-node_modules
-# Keep environment variables out of version control
+# Node modules
+node_modules/
+
+# Environment variables
 .env
+
+# Prisma client gerado
+/generated/
+
+# Arquivos gerados automaticamente pelo Prisma
+*.js
+*.ts
+*.d.ts
+*.node
+*.wasm
+
+# Prisma migration lock file (gerado automaticamente)
+prisma/migrations/migration_lock.toml
+
+# Cache do Prisma (opcional)
+.prisma/
+
+# Logs
+*.log
+
+# IDEs
+.vscode/
+.idea/

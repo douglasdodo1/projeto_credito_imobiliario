@@ -14,3 +14,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Cliente {
+  cpf String  @id
+  nome String
+  idade Int
+  renda Float
+  Telefones Telefone[]
+  SolicitacoesCredito SolicitacaoCredito[]
+}
+
+model Telefone {
+  id Int @id
+  cpf String
+  numero String
+
+  cliente Cliente @relation(fields: [cpf], references: [cpf])
+}
+
+model ModalidadeCredito{
+  id Int @id
+  nome String
+  tipoJuros String
+  taxaJuros Float?
+  taxaAdministracao Float?
+  idadeMinima Int
+  idadeMaxima Int
+  rendaMinima Decimal?
+  rendaMaxima Decimal?
+  prazoAnos Int
+  criadoEm DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  solicitacoesCredito SolicitacaoCredito[]
+}
+
+model LinhaFinanceamento{
+  id Int @id
+  tipoImovel String
+  criterioElegibilidade String
+
+  SolicitacoesCredito SolicitacaoCredito[]
+}
+
+model SolicitacaoCredito{
+  id Int @id
+  clienteCpf String
+  modalidadeCreditoId Int
+  linhaFinanceamentoId Int
+  status String
+  dataSolicitacao DateTime @default(now())
+
+  cliente Cliente @relation(fields: [clienteCpf], references: [cpf])
+  modalidadeCredito ModalidadeCredito @relation(fields: [modalidadeCreditoId], references: [id])
+  linhaFinanceamento LinhaFinanceamento @relation(fields: [linhaFinanceamentoId], references: [id])
+  atualizadoEm          DateTime              @updatedAt
+}
