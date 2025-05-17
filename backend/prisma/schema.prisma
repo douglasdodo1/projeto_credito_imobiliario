@@ -16,6 +16,7 @@ datasource db {
 
 model Cliente {
   cpf String  @id
+  tipo String
   nome String
   idade Int
   renda Float
@@ -27,7 +28,6 @@ model Telefone {
   id Int @id
   cpf String
   numero String
-
   cliente Cliente @relation(fields: [cpf], references: [cpf])
 }
 
@@ -44,7 +44,6 @@ model ModalidadeCredito{
   prazoAnos Int
   criadoEm DateTime @default(now())
   atualizadoEm DateTime @updatedAt
-
   solicitacoesCredito SolicitacaoCredito[]
 }
 
