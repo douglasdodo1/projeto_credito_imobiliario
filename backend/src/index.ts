@@ -32,7 +32,7 @@ app.get("/", (req: Request, res: Response) => {
 //CLIENTE
 app.post("/clientes", async (req: Request, res: Response) => {
   const cliente: ClientEntradaDto = req.body;
-  const clienteCriado: ClienteSaidaDto = await clienteService.criarCliente(cliente);
+  const clienteCriado: ClienteSaidaDto = await clienteService.criar(cliente);
   res.json(clienteCriado);
 });
 
@@ -44,14 +44,14 @@ app.get("/clientes", async (req: Request, res: Response) => {
     rendaMax: req.query.rendaMax ? Number(req.query.rendaMax) : undefined,
   };
 
-  const listaCliente: ClienteSaidaDto[] = await clienteService.buscarClientes(filtros);
+  const listaCliente: ClienteSaidaDto[] = await clienteService.buscarTodos(filtros);
   res.json(listaCliente);
 });
 
 app.put("/clientes/:cpf", async (req: Request, res: Response) => {
   const cpf: string = req.params.cpf;
   const alteracoesCliente: ClientEntradaDto = req.body;
-  const clienteAtualizado: ClienteSaidaDto = await clienteService.atualizarCliente(cpf, alteracoesCliente);
+  const clienteAtualizado: ClienteSaidaDto = await clienteService.atualizar(cpf, alteracoesCliente);
   res.send(clienteAtualizado);
 });
 //FIM CLIENTE

@@ -6,11 +6,11 @@ import { ClienteRepository } from "../repository/clienteRepository";
 export class ClienteService {
   clienteRepository: ClienteRepository = new ClienteRepository();
 
-  async criarCliente(cliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
+  async criar(cliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
     if (cliente == null) {
       throw new Error("Cliente não pode ser nulo.");
     }
-    const clienteCriado: ClienteSaidaDto = await this.clienteRepository.criarCliente(cliente);
+    const clienteCriado: ClienteSaidaDto = await this.clienteRepository.criar(cliente);
     return clienteCriado;
   }
 
@@ -24,7 +24,7 @@ export class ClienteService {
     return cliente;
   }
 
-  async buscarClientes(filtros?: FiltroClienteDto): Promise<ClienteSaidaDto[]> {
+  async buscarTodos(filtros?: FiltroClienteDto): Promise<ClienteSaidaDto[]> {
     const where: Prisma.ClienteWhereInput = {};
     if (filtros) {
       if (filtros.idadeMin !== undefined || filtros.idadeMax !== undefined) {
@@ -40,12 +40,12 @@ export class ClienteService {
         }
       }
     }
-    const listaClientes: ClienteSaidaDto[] = await this.clienteRepository.buscarClientes(where);
+    const listaClientes: ClienteSaidaDto[] = await this.clienteRepository.buscarTodos(where);
     return listaClientes;
   }
 
-  async atualizarCliente(cpf: string, alteracoesCliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
-    const clienteAtualizado: ClienteSaidaDto = await this.clienteRepository.atualizarCliente(cpf, alteracoesCliente);
+  async atualizar(cpf: string, alteracoesCliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
+    const clienteAtualizado: ClienteSaidaDto = await this.clienteRepository.atualizar(cpf, alteracoesCliente);
 
     console.log(clienteAtualizado);
     return clienteAtualizado;

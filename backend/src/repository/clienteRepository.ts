@@ -4,7 +4,7 @@ import { ClientEntradaDto, ClienteSaidaDto } from "../dtos/cliente.dto";
 import { TelefoneDto } from "../dtos/telefone.dto";
 
 export class ClienteRepository {
-  async criarCliente(cliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
+  async criar(cliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
     await prisma.cliente.create({
       data: {
         cpf: cliente.cpf,
@@ -46,7 +46,7 @@ export class ClienteRepository {
     return cliente;
   }
 
-  async buscarClientes(where?: Prisma.ClienteWhereInput): Promise<ClienteSaidaDto[]> {
+  async buscarTodos(where?: Prisma.ClienteWhereInput): Promise<ClienteSaidaDto[]> {
     const listaClientes: ClienteSaidaDto[] = await prisma.cliente.findMany({
       select: {
         cpf: true,
@@ -66,7 +66,7 @@ export class ClienteRepository {
     return listaClientes;
   }
 
-  async atualizarCliente(cpf: string, alteracoesCliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
+  async atualizar(cpf: string, alteracoesCliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
     const { Telefones, ...dadosCliente } = alteracoesCliente;
 
     const clienteAtualizado = await prisma.cliente.update({
