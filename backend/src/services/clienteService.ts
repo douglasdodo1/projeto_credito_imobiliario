@@ -2,7 +2,7 @@ import { Prisma } from "../../generated/prisma";
 import { ClientEntradaDto, ClienteSaidaDto } from "../dtos/cliente.dto";
 import { FiltroClienteDto } from "../dtos/filtroCliente.dto";
 import { ClienteRepository } from "../repository/clienteRepository";
-import { ClienteValidator } from "../validations.ts/clienteValidator";
+import { ClienteValidator } from "../validations/clienteValidator";
 
 export class ClienteService {
   clienteRepository: ClienteRepository = new ClienteRepository();
@@ -50,8 +50,7 @@ export class ClienteService {
 
   async atualizar(cpf: string, alteracoesCliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
     const clienteAtualizado: ClienteSaidaDto = await this.clienteRepository.atualizar(cpf, alteracoesCliente);
-
-    console.log(clienteAtualizado);
+    this.clienteValidator.verificarClienteUpdate(alteracoesCliente);
     return clienteAtualizado;
   }
 }

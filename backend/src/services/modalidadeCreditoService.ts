@@ -1,10 +1,13 @@
 import { ModalidadeCreditoDto } from "../dtos/modalidadeCredito.dto";
 import { ModalidadeCreditoRepository } from "../repository/modalidadeCreditoRepository";
+import { ModalidadeCreditoValidator } from "../validations/modalidadeCreditoValidator";
 
 export class ModalidadeCreditoService {
   modalidadeCreditoRepository: ModalidadeCreditoRepository = new ModalidadeCreditoRepository();
+  modalidadeCreditoValidator: ModalidadeCreditoValidator = new ModalidadeCreditoValidator(false);
 
   async criar(modalidadeCredito: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
+    await this.modalidadeCreditoValidator.verificarModalidadeCreditoValida(modalidadeCredito);
     const modalidadeCreditoCriada: ModalidadeCreditoDto = await this.modalidadeCreditoRepository.criar(
       modalidadeCredito
     );
@@ -21,6 +24,8 @@ export class ModalidadeCreditoService {
       id,
       alteracoesModalidade
     );
+
+    await this.modalidadeCreditoValidator.verificarModalidadeCreditoUpdate(alteracoesModalidade);
     return modalidadeAtualizada;
   }
 }
