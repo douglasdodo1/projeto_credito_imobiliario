@@ -6,6 +6,8 @@ import { ModalidadeCreditoService } from "./services/modalidadeCreditoService";
 import { LinhaFinanceamentoDto } from "./dtos/linhaFinanceamento.dto";
 import { LinhaFinanceamentoService } from "./services/linhaFinanceamentoService";
 import { ClienteInputDto, ClienteOutputDto } from "./dtos/cliente.dto";
+import { swaggerSpec } from "../swaggerConfig";
+import swaggerUi from "swagger-ui-express";
 
 const app = express();
 const PORT = 3000;
@@ -14,6 +16,7 @@ const modadelidadeCreditoService: ModalidadeCreditoService = new ModalidadeCredi
 const linhaFinanceamentoService: LinhaFinanceamentoService = new LinhaFinanceamentoService();
 
 app.use(express.json());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World");
@@ -45,7 +48,6 @@ app.put("/clientes/:cpf", async (req: Request, res: Response) => {
   res.send(clienteAtualizado);
 });
 //FIM CLIENTE
-
 
 //MODALIDADE DE CRÉDITO
 app.post("/modalidades-credito", async (req: Request, res: Response) => {
@@ -99,4 +101,5 @@ app.patch("/linhas-financeamento/:id", async (req: Request, res: Response) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  console.log("Documentação Swagger: http://localhost:3000/api-docs");
 });
