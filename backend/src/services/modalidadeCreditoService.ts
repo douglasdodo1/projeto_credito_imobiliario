@@ -4,39 +4,20 @@ import { ModalidadeCreditoRepository } from "../repository/modalidadeCreditoRepo
 export class ModalidadeCreditoService {
   modalidadeCreditoRepository: ModalidadeCreditoRepository = new ModalidadeCreditoRepository();
 
-  async criarModalidadeCredito(modalidadeCredito: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
-    if (modalidadeCredito == null) {
-      throw new Error("modalidade crédito não pode ser vazia");
-    }
-    if (modalidadeCredito.nome == undefined) {
-      throw new Error("nome é obrigatório");
-    }
-    if (modalidadeCredito.tipoJuros == undefined) {
-      throw new Error("nome é obrigatório");
-    }
-    if (modalidadeCredito.idadeMinima == undefined) {
-      throw new Error("nome é obrigatório");
-    }
-    if (modalidadeCredito.idadeMaxima == undefined) {
-      throw new Error("nome é obrigatório");
-    }
-    if (modalidadeCredito.prazoAnos == undefined) {
-      throw new Error("nome é obrigatório");
-    }
-
-    const modalidadeCreditoCriada: ModalidadeCreditoDto = await this.modalidadeCreditoRepository.criarModalidadeCredito(
+  async criar(modalidadeCredito: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
+    const modalidadeCreditoCriada: ModalidadeCreditoDto = await this.modalidadeCreditoRepository.criar(
       modalidadeCredito
     );
     return modalidadeCreditoCriada;
   }
 
-  async buscarModalidades(): Promise<ModalidadeCreditoDto[]> {
-    const listaModalidadeCredito: ModalidadeCreditoDto[] = await this.modalidadeCreditoRepository.buscarModalidades();
+  async buscarTodas(): Promise<ModalidadeCreditoDto[]> {
+    const listaModalidadeCredito: ModalidadeCreditoDto[] = await this.modalidadeCreditoRepository.buscarTodas();
     return listaModalidadeCredito;
   }
 
-  async atualizarModalidade(id: number, alteracoesModalidade: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
-    const modalidadeAtualizada: ModalidadeCreditoDto = await this.modalidadeCreditoRepository.atualizarModalidade(
+  async atualizar(id: number, alteracoesModalidade: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
+    const modalidadeAtualizada: ModalidadeCreditoDto = await this.modalidadeCreditoRepository.atualizar(
       id,
       alteracoesModalidade
     );

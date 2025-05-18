@@ -2,10 +2,10 @@ import { ModalidadeCreditoDto } from "../dtos/modalidadeCredito.dto";
 import prisma from "../creditoImobiliarioDB";
 
 export class ModalidadeCreditoRepository {
-  async criarModalidadeCredito(modalidadeCredito: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
+  async criar(modalidadeCredito: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
     const modalidadeCreditoCriada = await prisma.modalidadeCredito.create({
       data: {
-        nome: modalidadeCredito.nome!,
+        nome: modalidadeCredito.nome,
         tipoJuros: modalidadeCredito.tipoJuros,
         taxaJuros: modalidadeCredito.taxaJuros,
         taxaAdministracao: modalidadeCredito.taxaAdministracao,
@@ -26,7 +26,7 @@ export class ModalidadeCreditoRepository {
     return result;
   }
 
-  async buscarModalidades(): Promise<ModalidadeCreditoDto[]> {
+  async buscarTodas(): Promise<ModalidadeCreditoDto[]> {
     const listaModalidadesCredito = await prisma.modalidadeCredito.findMany();
     const resultado: ModalidadeCreditoDto[] = listaModalidadesCredito.map((modalidade) => ({
       ...modalidade,
@@ -36,26 +36,12 @@ export class ModalidadeCreditoRepository {
     return resultado;
   }
 
-  async atualizarModalidade(id: number, alteracoesModalidade: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
+  async atualizar(id: number, alteracoesModalidade: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
     const modalidadeAtualizada = await prisma.modalidadeCredito.update({
       where: { id: id },
       data: alteracoesModalidade,
     });
 
-    const resultado: ModalidadeCreditoDto = {
-      ...modalidadeAtualizada,
-      rendaMinima: modalidadeAtualizada.rendaMinima ? Number(modalidadeAtualizada.rendaMinima) : null,
-      rendaMaxima: modalidadeAtualizada.rendaMaxima ? Number(modalidadeAtualizada.rendaMaxima) : null,
-    };
-    return resultado;
-  }
-
-  async atualizarEstado(id: number, novoEstado: boolean): Promise<ModalidadeCreditoDto> {
-    console.log(novoEstado);
-    const modalidadeAtualizada = await prisma.modalidadeCredito.update({
-      where: { id: id },
-      data: { ativo: novoEstado },
-    });
     const resultado: ModalidadeCreditoDto = {
       ...modalidadeAtualizada,
       rendaMinima: modalidadeAtualizada.rendaMinima ? Number(modalidadeAtualizada.rendaMinima) : null,

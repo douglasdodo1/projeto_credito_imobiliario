@@ -13,7 +13,6 @@ import {
   SolicitacaoFinanceamentoSaidaDto,
 } from "./dtos/solicitacaoFinanceamento.dto";
 import { SolicitacaoFinanceamentoService } from "./services/solicitacaoFinanceamentoService";
-import { SolicitacaoCredito } from "../generated/prisma";
 
 const app = express();
 const PORT = 3000;
@@ -59,15 +58,13 @@ app.put("/clientes/:cpf", async (req: Request, res: Response) => {
 //MODALIDADE DE CRÉDITO
 app.post("/modalidades-credito", async (req: Request, res: Response) => {
   const modalidadeCredito: ModalidadeCreditoDto = req.body;
-  const modalidadeCreditoCriada: ModalidadeCreditoDto = await modadelidadeCreditoService.criarModalidadeCredito(
-    modalidadeCredito
-  );
+  const modalidadeCreditoCriada: ModalidadeCreditoDto = await modadelidadeCreditoService.criar(modalidadeCredito);
 
   res.json(modalidadeCreditoCriada);
 });
 
 app.get("/modalidades-credito", async (req: Request, res: Response) => {
-  const listaModalidadeCredito: ModalidadeCreditoDto[] = await modadelidadeCreditoService.buscarModalidades();
+  const listaModalidadeCredito: ModalidadeCreditoDto[] = await modadelidadeCreditoService.buscarTodas();
   res.json(listaModalidadeCredito);
 });
 
@@ -75,7 +72,7 @@ app.patch("/modalidades-credito/:id", async (req: Request, res: Response) => {
   const id: number = Number(req.params.id);
   const alteracoesModalidade: ModalidadeCreditoDto = req.body;
 
-  const modalidadeAtualizada: ModalidadeCreditoDto = await modadelidadeCreditoService.atualizarModalidade(
+  const modalidadeAtualizada: ModalidadeCreditoDto = await modadelidadeCreditoService.atualizar(
     id,
     alteracoesModalidade
   );
