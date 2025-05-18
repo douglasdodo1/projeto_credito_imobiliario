@@ -8,10 +8,6 @@ node_modules/
 /generated/
 
 # Arquivos gerados automaticamente pelo Prisma
-*.js
-*.ts
-*.d.ts
-*.node
 *.wasm
 
 # Prisma migration lock file (gerado automaticamente)
