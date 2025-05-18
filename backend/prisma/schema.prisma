@@ -58,7 +58,7 @@ model LinhaFinanceamento{
 }
 
 model SolicitacaoCredito{
-  id Int @id
+  id Int @id @default(autoincrement())
   clienteCpf String
   modalidadeCreditoId Int
   linhaFinanceamentoId Int

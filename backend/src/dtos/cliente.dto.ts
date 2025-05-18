@@ -1,15 +1,14 @@
 // clienteInput.dto.ts
-export interface ClienteInputDto {
+export interface ClientEntradaDto {
   cpf: string;
   tipo: string;
   nome: string;
   idade: number;
   renda: number;
-  Telefones: { numero: string }[];
+  Telefones?: { numero: string }[];
 }
 
-// clienteOutput.dto.ts
-export interface ClienteOutputDto {
+export interface ClienteSaidaDto {
   tipo: string;
   nome: string;
   idade: number;

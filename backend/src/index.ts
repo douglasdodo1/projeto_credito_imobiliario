@@ -5,15 +5,22 @@ import { ClienteService } from "./services/clienteService";
 import { ModalidadeCreditoService } from "./services/modalidadeCreditoService";
 import { LinhaFinanceamentoDto } from "./dtos/linhaFinanceamento.dto";
 import { LinhaFinanceamentoService } from "./services/linhaFinanceamentoService";
-import { ClienteInputDto, ClienteOutputDto } from "./dtos/cliente.dto";
+import { ClientEntradaDto, ClienteSaidaDto } from "./dtos/cliente.dto";
 import { swaggerSpec } from "../swaggerConfig";
 import swaggerUi from "swagger-ui-express";
+import {
+  SolicitacaoFinanceamentoEntradaDto,
+  SolicitacaoFinanceamentoSaidaDto,
+} from "./dtos/solicitacaoFinanceamento.dto";
+import { SolicitacaoFinanceamentoService } from "./services/solicitacaoFinanceamentoService";
+import { SolicitacaoCredito } from "../generated/prisma";
 
 const app = express();
 const PORT = 3000;
 const clienteService: ClienteService = new ClienteService();
 const modadelidadeCreditoService: ModalidadeCreditoService = new ModalidadeCreditoService();
 const linhaFinanceamentoService: LinhaFinanceamentoService = new LinhaFinanceamentoService();
+const solicitacaoFinanceamentoService: SolicitacaoFinanceamentoService = new SolicitacaoFinanceamentoService();
 
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -24,8 +31,8 @@ app.get("/", (req: Request, res: Response) => {
 
 //CLIENTE
 app.post("/clientes", async (req: Request, res: Response) => {
-  const cliente: ClienteInputDto = req.body;
-  const clienteCriado: ClienteOutputDto = await clienteService.criarCliente(cliente);
+  const cliente: ClientEntradaDto = req.body;
+  const clienteCriado: ClienteSaidaDto = await clienteService.criarCliente(cliente);
   res.json(clienteCriado);
 });
 
@@ -37,14 +44,14 @@ app.get("/clientes", async (req: Request, res: Response) => {
     rendaMax: req.query.rendaMax ? Number(req.query.rendaMax) : undefined,
   };
 
-  const listaCliente: ClienteOutputDto[] = await clienteService.buscarClientes(filtros);
+  const listaCliente: ClienteSaidaDto[] = await clienteService.buscarClientes(filtros);
   res.json(listaCliente);
 });
 
 app.put("/clientes/:cpf", async (req: Request, res: Response) => {
   const cpf: string = req.params.cpf;
-  const alteracoesCliente: ClienteInputDto = req.body;
-  const clienteAtualizado: ClienteOutputDto = await clienteService.atualizarCliente(cpf, alteracoesCliente);
+  const alteracoesCliente: ClientEntradaDto = req.body;
+  const clienteAtualizado: ClienteSaidaDto = await clienteService.atualizarCliente(cpf, alteracoesCliente);
   res.send(clienteAtualizado);
 });
 //FIM CLIENTE
@@ -98,6 +105,34 @@ app.patch("/linhas-financeamento/:id", async (req: Request, res: Response) => {
   res.json(linhaFinanceamentoAtualizada);
 });
 //FIM LINHA FINANCEAMENTO
+
+//SOLICITACAO FINANCEAMENTO
+app.post("/solicitacoes-financeamento", async (req: Request, res: Response) => {
+  const solicitacaoFinanceamento: SolicitacaoFinanceamentoEntradaDto = req.body;
+  const solicitacaoFinanceamentoCriada: SolicitacaoFinanceamentoSaidaDto = await solicitacaoFinanceamentoService.criar(
+    solicitacaoFinanceamento
+  );
+  res.json(solicitacaoFinanceamentoCriada);
+});
+
+app.get("/solicitacoes-financeamento", async (req: Request, res: Response) => {
+  const listaSolicitacoesFinanceamento = await solicitacaoFinanceamentoService.buscarTodas();
+  res.json(listaSolicitacoesFinanceamento);
+});
+
+app.get("/solicitacoes-financeamento/:cpf", async (req: Request, res: Response) => {
+  const cpf: string = req.params.cpf;
+
+  const listaSolicitacoesFinanceamento = await solicitacaoFinanceamentoService.buscarTodas(cpf);
+  res.json(listaSolicitacoesFinanceamento);
+});
+
+app.patch("/solicitacoes-financeamento:id", async (req: Request, res: Response) => {
+  const id: number = Number(req.params.cpf);
+  const novoEstado: string = req.body;
+  const solicitacaoAtualizada = await solicitacaoFinanceamentoService.atualizarEstado(id, novoEstado);
+  res.json(solicitacaoAtualizada);
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
