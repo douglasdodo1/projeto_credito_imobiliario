@@ -1,6 +1,5 @@
 import prisma from "../creditoImobiliarioDB";
 import { clienteDto } from "../dtos/cliente.dto";
-import { FiltroClienteDto } from "../dtos/filtroCliente.dto";
 import { Prisma } from "../../generated/prisma";
 
 export class ClienteRepository {

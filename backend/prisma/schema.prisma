@@ -51,6 +51,7 @@ model ModalidadeCredito{
 model LinhaFinanceamento{
   id Int @id @default(autoincrement())
   tipoImovel String
+  ativo Boolean @default(true)
   criterioElegibilidade String
 
   SolicitacoesCredito SolicitacaoCredito[]

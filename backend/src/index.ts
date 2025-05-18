@@ -4,11 +4,14 @@ import { FiltroClienteDto } from "./dtos/filtroCliente.dto";
 import { ModalidadeCreditoDto } from "./dtos/modalidadeCredito.dto";
 import { ClienteService } from "./services/clienteService";
 import { ModalidadeCreditoService } from "./services/modalidadeCreditoService";
+import { LinhaFinanceamentoDto } from "./dtos/linhaFinanceamento.dto";
+import { LinhaFinanceamentoService } from "./services/linhaFinanceamentoService";
 
 const app = express();
 const PORT = 3000;
 const clienteService: ClienteService = new ClienteService();
 const modadelidadeCreditoService: ModalidadeCreditoService = new ModalidadeCreditoService();
+const linhaFinanceamentoService: LinhaFinanceamentoService = new LinhaFinanceamentoService();
 
 app.use(express.json());
 
@@ -77,6 +80,29 @@ app.patch("/modalidades-credito/:id/ativacao", async (req: Request, res: Respons
   res.json(modalidadeAtualizada);
 });
 //FIM MODALIDADE DE CRÉDITO
+
+//LINHA FINANCEAMENTO
+app.post("/linhas-financeamento", async (req: Request, res: Response) => {
+  const linhaFinanceamento: Required<LinhaFinanceamentoDto> = req.body;
+  const linhaFinanceamentoCriada: LinhaFinanceamentoDto = await linhaFinanceamentoService.criar(linhaFinanceamento);
+  res.json(linhaFinanceamentoCriada);
+});
+
+app.get("/linhas-financeamento", async (req: Request, res: Response) => {
+  const listaLinhaFinanceamento: LinhaFinanceamentoDto[] = await linhaFinanceamentoService.buscarTodas();
+  res.json(listaLinhaFinanceamento);
+});
+
+app.patch("/linhas-financeamento/:id", async (req: Request, res: Response) => {
+  const id: number = Number(req.params.id);
+  const alteracoesLinhaFinanceamento: LinhaFinanceamentoDto = req.body;
+  const linhaFinanceamentoAtualizada: LinhaFinanceamentoDto = await linhaFinanceamentoService.atualizar(
+    id,
+    alteracoesLinhaFinanceamento
+  );
+  res.json(linhaFinanceamentoAtualizada);
+});
+//FIM LINHA FINANCEAMENTO
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
