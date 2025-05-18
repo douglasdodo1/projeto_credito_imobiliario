@@ -9,12 +9,11 @@ export class ModalidadeCreditoRepository {
         tipoJuros: modalidadeCredito.tipoJuros,
         taxaJuros: modalidadeCredito.taxaJuros,
         taxaAdministracao: modalidadeCredito.taxaAdministracao,
-        idadeMinima: modalidadeCredito.idadeMinima!,
-        idadeMaxima: modalidadeCredito.idadeMaxima!,
+        idadeMinima: modalidadeCredito.idadeMinima,
+        idadeMaxima: modalidadeCredito.idadeMaxima,
         rendaMinima: modalidadeCredito.rendaMinima,
         rendaMaxima: modalidadeCredito.rendaMaxima,
-        prazoAnos: modalidadeCredito.prazoAnos!,
-        solicitacoesCredito: {},
+        prazoAnos: modalidadeCredito.prazoAnos,
       },
     });
 
@@ -40,25 +39,15 @@ export class ModalidadeCreditoRepository {
   async atualizarModalidade(id: number, alteracoesModalidade: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
     const modalidadeAtualizada = await prisma.modalidadeCredito.update({
       where: { id: id },
-      data: {
-        nome: alteracoesModalidade.nome,
-        tipoJuros: alteracoesModalidade.tipoJuros,
-        taxaJuros: alteracoesModalidade.taxaJuros,
-        taxaAdministracao: alteracoesModalidade.taxaAdministracao,
-        idadeMinima: alteracoesModalidade.idadeMinima ?? undefined,
-        idadeMaxima: alteracoesModalidade.idadeMaxima ?? undefined,
-        rendaMinima: alteracoesModalidade.rendaMinima,
-        rendaMaxima: alteracoesModalidade.rendaMaxima,
-        prazoAnos: alteracoesModalidade.rendaMaxima ?? undefined,
-      },
+      data: alteracoesModalidade,
     });
 
-    const result: ModalidadeCreditoDto = {
+    const resultado: ModalidadeCreditoDto = {
       ...modalidadeAtualizada,
       rendaMinima: modalidadeAtualizada.rendaMinima ? Number(modalidadeAtualizada.rendaMinima) : null,
       rendaMaxima: modalidadeAtualizada.rendaMaxima ? Number(modalidadeAtualizada.rendaMaxima) : null,
     };
-    return result;
+    return resultado;
   }
 
   async atualizarEstado(id: number, novoEstado: boolean): Promise<ModalidadeCreditoDto> {
@@ -67,10 +56,11 @@ export class ModalidadeCreditoRepository {
       where: { id: id },
       data: { ativo: novoEstado },
     });
-    return {
+    const resultado: ModalidadeCreditoDto = {
       ...modalidadeAtualizada,
       rendaMinima: modalidadeAtualizada.rendaMinima ? Number(modalidadeAtualizada.rendaMinima) : null,
       rendaMaxima: modalidadeAtualizada.rendaMaxima ? Number(modalidadeAtualizada.rendaMaxima) : null,
     };
+    return resultado;
   }
 }

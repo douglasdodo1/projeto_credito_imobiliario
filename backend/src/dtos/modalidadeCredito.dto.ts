@@ -1,15 +1,13 @@
 export interface ModalidadeCreditoDto {
   id?: number;
-  nome?: string;
-  ativo?: boolean;
+  nome: string;
   tipoJuros: string;
-  taxaJuros: number | null;
+  taxaJuros?: number | null;
   taxaAdministracao?: number | null;
-  idadeMinima?: number | null;
-  idadeMaxima?: number | null;
+  idadeMinima: number;
+  idadeMaxima: number;
   rendaMinima?: number | null;
   rendaMaxima?: number | null;
-  prazoAnos?: number;
-  criadoEm?: Date;
-  atualizadoEm?: Date;
+  prazoAnos: number;
+  ativo?: boolean;
 }

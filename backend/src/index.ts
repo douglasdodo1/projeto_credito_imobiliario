@@ -61,7 +61,7 @@ app.get("/modalidades-credito", async (req: Request, res: Response) => {
   res.json(listaModalidadeCredito);
 });
 
-app.put("/modalidades-credito/:id", async (req: Request, res: Response) => {
+app.patch("/modalidades-credito/:id", async (req: Request, res: Response) => {
   const id: number = Number(req.params.id);
   const alteracoesModalidade: ModalidadeCreditoDto = req.body;
 
@@ -69,14 +69,6 @@ app.put("/modalidades-credito/:id", async (req: Request, res: Response) => {
     id,
     alteracoesModalidade
   );
-  res.json(modalidadeAtualizada);
-});
-
-app.patch("/modalidades-credito/:id/ativacao", async (req: Request, res: Response) => {
-  const id: number = Number(req.params.id);
-  const novoEstado: boolean = req.body.ativo;
-
-  const modalidadeAtualizada: ModalidadeCreditoDto = await modadelidadeCreditoService.atualizarEstado(id, novoEstado);
   res.json(modalidadeAtualizada);
 });
 //FIM MODALIDADE DE CRÉDITO

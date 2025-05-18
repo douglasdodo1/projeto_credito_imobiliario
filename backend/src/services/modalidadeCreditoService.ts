@@ -42,12 +42,4 @@ export class ModalidadeCreditoService {
     );
     return modalidadeAtualizada;
   }
-
-  async atualizarEstado(id: number, novoEstado: boolean): Promise<ModalidadeCreditoDto> {
-    const modalidadeAtualizada: ModalidadeCreditoDto = await this.modalidadeCreditoRepository.atualizarEstado(
-      id,
-      novoEstado
-    );
-    return modalidadeAtualizada;
-  }
 }
