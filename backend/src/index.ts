@@ -13,6 +13,8 @@ import {
   SolicitacaoFinanceamentoSaidaDto,
 } from "./dtos/solicitacaoFinanceamento.dto";
 import { SolicitacaoFinanceamentoService } from "./services/solicitacaoFinanceamentoService";
+import { catchAsync } from "./utils/catchAsync";
+import { errorHandler } from "./middlewares/erroHandler";
 
 const app = express();
 const PORT = 3000;
@@ -29,107 +31,144 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 //CLIENTE
-app.post("/clientes", async (req: Request, res: Response) => {
-  const cliente: ClientEntradaDto = req.body;
-  const clienteCriado: ClienteSaidaDto = await clienteService.criar(cliente);
-  res.json(clienteCriado);
-});
+app.post(
+  "/clientes",
+  catchAsync(async (req: Request, res: Response) => {
+    const cliente: ClientEntradaDto = req.body;
+    const clienteCriado: ClienteSaidaDto = await clienteService.criar(cliente);
+    res.json(clienteCriado);
+  })
+);
 
-app.get("/clientes", async (req: Request, res: Response) => {
-  const filtros: FiltroClienteDto = {
-    idadeMin: req.query.idadeMin ? Number(req.query.idadeMin) : undefined,
-    idadeMax: req.query.idadeMax ? Number(req.query.idadeMax) : undefined,
-    rendaMin: req.query.rendaMin ? Number(req.query.rendaMin) : undefined,
-    rendaMax: req.query.rendaMax ? Number(req.query.rendaMax) : undefined,
-  };
+app.get(
+  "/clientes",
+  catchAsync(async (req: Request, res: Response) => {
+    const filtros: FiltroClienteDto = {
+      idadeMin: req.query.idadeMin ? Number(req.query.idadeMin) : undefined,
+      idadeMax: req.query.idadeMax ? Number(req.query.idadeMax) : undefined,
+      rendaMin: req.query.rendaMin ? Number(req.query.rendaMin) : undefined,
+      rendaMax: req.query.rendaMax ? Number(req.query.rendaMax) : undefined,
+    };
 
-  const listaCliente: ClienteSaidaDto[] = await clienteService.buscarTodos(filtros);
-  res.json(listaCliente);
-});
+    const listaCliente: ClienteSaidaDto[] = await clienteService.buscarTodos(filtros);
+    res.json(listaCliente);
+  })
+);
 
-app.put("/clientes/:cpf", async (req: Request, res: Response) => {
-  const cpf: string = req.params.cpf;
-  const alteracoesCliente: ClientEntradaDto = req.body;
-  const clienteAtualizado: ClienteSaidaDto = await clienteService.atualizar(cpf, alteracoesCliente);
-  res.send(clienteAtualizado);
-});
-//FIM CLIENTE
+app.put(
+  "/clientes/:cpf",
+  catchAsync(async (req: Request, res: Response) => {
+    const cpf: string = req.params.cpf;
+    const alteracoesCliente: ClientEntradaDto = req.body;
+    const clienteAtualizado: ClienteSaidaDto = await clienteService.atualizar(cpf, alteracoesCliente);
+    res.send(clienteAtualizado);
+  })
+);
 
 //MODALIDADE DE CRÉDITO
-app.post("/modalidades-credito", async (req: Request, res: Response) => {
-  const modalidadeCredito: ModalidadeCreditoDto = req.body;
-  const modalidadeCreditoCriada: ModalidadeCreditoDto = await modadelidadeCreditoService.criar(modalidadeCredito);
+app.post(
+  "/modalidades-credito",
+  catchAsync(async (req: Request, res: Response) => {
+    const modalidadeCredito: ModalidadeCreditoDto = req.body;
+    const modalidadeCreditoCriada: ModalidadeCreditoDto = await modadelidadeCreditoService.criar(modalidadeCredito);
 
-  res.json(modalidadeCreditoCriada);
-});
+    res.json(modalidadeCreditoCriada);
+  })
+);
 
-app.get("/modalidades-credito", async (req: Request, res: Response) => {
-  const listaModalidadeCredito: ModalidadeCreditoDto[] = await modadelidadeCreditoService.buscarTodas();
-  res.json(listaModalidadeCredito);
-});
+app.get(
+  "/modalidades-credito",
+  catchAsync(async (req: Request, res: Response) => {
+    const listaModalidadeCredito: ModalidadeCreditoDto[] = await modadelidadeCreditoService.buscarTodas();
+    res.json(listaModalidadeCredito);
+  })
+);
 
-app.patch("/modalidades-credito/:id", async (req: Request, res: Response) => {
-  const id: number = Number(req.params.id);
-  const alteracoesModalidade: ModalidadeCreditoDto = req.body;
+app.patch(
+  "/modalidades-credito/:id",
+  catchAsync(async (req: Request, res: Response) => {
+    const id: number = Number(req.params.id);
+    const alteracoesModalidade: ModalidadeCreditoDto = req.body;
 
-  const modalidadeAtualizada: ModalidadeCreditoDto = await modadelidadeCreditoService.atualizar(
-    id,
-    alteracoesModalidade
-  );
-  res.json(modalidadeAtualizada);
-});
-//FIM MODALIDADE DE CRÉDITO
+    const modalidadeAtualizada: ModalidadeCreditoDto = await modadelidadeCreditoService.atualizar(
+      id,
+      alteracoesModalidade
+    );
+    res.json(modalidadeAtualizada);
+  })
+);
 
 //LINHA FINANCEAMENTO
-app.post("/linhas-financeamento", async (req: Request, res: Response) => {
-  const linhaFinanceamento: Required<LinhaFinanceamentoDto> = req.body;
-  const linhaFinanceamentoCriada: LinhaFinanceamentoDto = await linhaFinanceamentoService.criar(linhaFinanceamento);
-  res.json(linhaFinanceamentoCriada);
-});
+app.post(
+  "/linhas-financeamento",
+  catchAsync(async (req: Request, res: Response) => {
+    const linhaFinanceamento: Required<LinhaFinanceamentoDto> = req.body;
+    const linhaFinanceamentoCriada: LinhaFinanceamentoDto = await linhaFinanceamentoService.criar(linhaFinanceamento);
+    res.json(linhaFinanceamentoCriada);
+  })
+);
 
-app.get("/linhas-financeamento", async (req: Request, res: Response) => {
-  const listaLinhaFinanceamento: LinhaFinanceamentoDto[] = await linhaFinanceamentoService.buscarTodas();
-  res.json(listaLinhaFinanceamento);
-});
+app.get(
+  "/linhas-financeamento",
+  catchAsync(async (req: Request, res: Response) => {
+    const listaLinhaFinanceamento: LinhaFinanceamentoDto[] = await linhaFinanceamentoService.buscarTodas();
+    res.json(listaLinhaFinanceamento);
+  })
+);
 
-app.patch("/linhas-financeamento/:id", async (req: Request, res: Response) => {
-  const id: number = Number(req.params.id);
-  const alteracoesLinhaFinanceamento: LinhaFinanceamentoDto = req.body;
-  const linhaFinanceamentoAtualizada: LinhaFinanceamentoDto = await linhaFinanceamentoService.atualizar(
-    id,
-    alteracoesLinhaFinanceamento
-  );
-  res.json(linhaFinanceamentoAtualizada);
-});
-//FIM LINHA FINANCEAMENTO
+app.patch(
+  "/linhas-financeamento/:id",
+  catchAsync(async (req: Request, res: Response) => {
+    const id: number = Number(req.params.id);
+    const alteracoesLinhaFinanceamento: LinhaFinanceamentoDto = req.body;
+    const linhaFinanceamentoAtualizada: LinhaFinanceamentoDto = await linhaFinanceamentoService.atualizar(
+      id,
+      alteracoesLinhaFinanceamento
+    );
+    res.json(linhaFinanceamentoAtualizada);
+  })
+);
 
 //SOLICITACAO FINANCEAMENTO
-app.post("/solicitacoes-financeamento", async (req: Request, res: Response) => {
-  const solicitacaoFinanceamento: SolicitacaoFinanceamentoEntradaDto = req.body;
-  const solicitacaoFinanceamentoCriada: SolicitacaoFinanceamentoSaidaDto = await solicitacaoFinanceamentoService.criar(
-    solicitacaoFinanceamento
-  );
-  res.json(solicitacaoFinanceamentoCriada);
-});
+app.post(
+  "/solicitacoes-financeamento",
+  catchAsync(async (req: Request, res: Response) => {
+    const solicitacaoFinanceamento: SolicitacaoFinanceamentoEntradaDto = req.body;
+    const solicitacaoFinanceamentoCriada: SolicitacaoFinanceamentoSaidaDto =
+      await solicitacaoFinanceamentoService.criar(solicitacaoFinanceamento);
+    res.json(solicitacaoFinanceamentoCriada);
+  })
+);
 
-app.get("/solicitacoes-financeamento", async (req: Request, res: Response) => {
-  const listaSolicitacoesFinanceamento = await solicitacaoFinanceamentoService.buscarTodas();
-  res.json(listaSolicitacoesFinanceamento);
-});
+app.get(
+  "/solicitacoes-financeamento",
+  catchAsync(async (req: Request, res: Response) => {
+    const listaSolicitacoesFinanceamento = await solicitacaoFinanceamentoService.buscarTodas();
+    res.json(listaSolicitacoesFinanceamento);
+  })
+);
 
-app.get("/solicitacoes-financeamento/:cpf", async (req: Request, res: Response) => {
-  const cpf: string = req.params.cpf;
+app.get(
+  "/solicitacoes-financeamento/:cpf",
+  catchAsync(async (req: Request, res: Response) => {
+    const cpf: string = req.params.cpf;
 
-  const listaSolicitacoesFinanceamento = await solicitacaoFinanceamentoService.buscarTodas(cpf);
-  res.json(listaSolicitacoesFinanceamento);
-});
+    const listaSolicitacoesFinanceamento = await solicitacaoFinanceamentoService.buscarTodas(cpf);
+    res.json(listaSolicitacoesFinanceamento);
+  })
+);
 
-app.patch("/solicitacoes-financeamento:id", async (req: Request, res: Response) => {
-  const id: number = Number(req.params.cpf);
-  const novoEstado: string = req.body;
-  const solicitacaoAtualizada = await solicitacaoFinanceamentoService.atualizarEstado(id, novoEstado);
-  res.json(solicitacaoAtualizada);
-});
+app.patch(
+  "/solicitacoes-financeamento/:id",
+  catchAsync(async (req: Request, res: Response) => {
+    const id: number = Number(req.params.id);
+    const novoEstado: string = req.body;
+    const solicitacaoAtualizada = await solicitacaoFinanceamentoService.atualizarEstado(id, novoEstado);
+    res.json(solicitacaoAtualizada);
+  })
+);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

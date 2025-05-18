@@ -1,15 +1,19 @@
-import { Cliente, Prisma } from "../../generated/prisma";
+import { Prisma } from "../../generated/prisma";
 import { ClientEntradaDto, ClienteSaidaDto } from "../dtos/cliente.dto";
 import { FiltroClienteDto } from "../dtos/filtroCliente.dto";
 import { ClienteRepository } from "../repository/clienteRepository";
+import { ClienteValidator } from "../validations.ts/clienteValidator";
 
 export class ClienteService {
   clienteRepository: ClienteRepository = new ClienteRepository();
+  clienteValidator: ClienteValidator = new ClienteValidator(false);
 
   async criar(cliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
     if (cliente == null) {
       throw new Error("Cliente não pode ser nulo.");
     }
+
+    await this.clienteValidator.verificarClienteValido(cliente);
     const clienteCriado: ClienteSaidaDto = await this.clienteRepository.criar(cliente);
     return clienteCriado;
   }
