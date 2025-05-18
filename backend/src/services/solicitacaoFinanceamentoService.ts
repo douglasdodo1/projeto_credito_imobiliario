@@ -9,8 +9,9 @@ import { SolicitacaoFinanceamentoValidator } from "../validations/solicitacaoFin
 export class SolicitacaoFinanceamentoService {
   private solicitacaoFinanceamentoRepository: SolicitacaoFinanceamentoRepository =
     new SolicitacaoFinanceamentoRepository();
-  private solicitacaoFinanceamentoValidator: SolicitacaoFinanceamentoValidator =
-    new SolicitacaoFinanceamentoValidator();
+  private solicitacaoFinanceamentoValidator: SolicitacaoFinanceamentoValidator = new SolicitacaoFinanceamentoValidator(
+    true
+  );
 
   async criar(solicitacao: SolicitacaoFinanceamentoEntradaDto): Promise<SolicitacaoFinanceamentoSaidaDto> {
     if (!solicitacao) {

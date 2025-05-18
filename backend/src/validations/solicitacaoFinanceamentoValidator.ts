@@ -26,6 +26,14 @@ export class SolicitacaoFinanceamentoValidator {
         this.erros.push(new Error("Cliente não encontrado"));
       }
 
+      if (
+        solicitacao.status !== "aprovada" &&
+        solicitacao.status !== "reprovada" &&
+        solicitacao.status !== "pendente"
+      ) {
+        this.erros.push(new Error("status deve ser igual a aprovada ou reprovada ou pendente"));
+      }
+
       const modalidadeCredito: ModalidadeCreditoDto | null = await this.modalidadeCreditoRepository.buscarPorId(
         solicitacao.modalidadeCreditoId
       );

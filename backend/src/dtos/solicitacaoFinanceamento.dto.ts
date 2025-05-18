@@ -4,6 +4,7 @@ import { ModalidadeCreditoDto } from "./modalidadeCredito.dto";
 
 export enum StatusSolicitacao {
   APROVADA = "aprovada",
+  PENDENTE = "pendente",
   REPROVADA = "reprovada",
 }
 
