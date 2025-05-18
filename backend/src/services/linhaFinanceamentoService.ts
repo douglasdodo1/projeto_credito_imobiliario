@@ -3,8 +3,8 @@ import { LinhaFinanceamentoRepository } from "../repository/linhaFinanceamentoRe
 import { LinhaFinanceamentoValidator } from "../validations/linhaFinanceamentoValidator";
 
 export class LinhaFinanceamentoService {
-  linhaFinanceamentoRepository: LinhaFinanceamentoRepository = new LinhaFinanceamentoRepository();
-  linhaFinanceamentoValidator: LinhaFinanceamentoValidator = new LinhaFinanceamentoValidator(true);
+  private linhaFinanceamentoRepository: LinhaFinanceamentoRepository = new LinhaFinanceamentoRepository();
+  private linhaFinanceamentoValidator: LinhaFinanceamentoValidator = new LinhaFinanceamentoValidator(true);
 
   async criar(linhaFinanceamento: Required<LinhaFinanceamentoDto>): Promise<LinhaFinanceamentoDto> {
     await this.linhaFinanceamentoValidator.verificarLinhaFinanceamentoValido(linhaFinanceamento);
@@ -12,6 +12,15 @@ export class LinhaFinanceamentoService {
       linhaFinanceamento
     );
     return linhaFinanceamentoCriada;
+  }
+
+  async buscarPorId(id: number): Promise<LinhaFinanceamentoDto> {
+    const linhaFinanceamento: LinhaFinanceamentoDto = await this.linhaFinanceamentoRepository.buscarPorId(id);
+    if (!linhaFinanceamento) {
+      throw new Error("linha de financeamento não encontrada");
+    }
+
+    return linhaFinanceamento;
   }
 
   async buscarTodas(): Promise<LinhaFinanceamentoDto[]> {

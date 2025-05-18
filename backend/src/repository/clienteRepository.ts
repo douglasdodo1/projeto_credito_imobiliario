@@ -40,9 +40,6 @@ export class ClienteRepository {
         Telefones: true,
       },
     });
-    if (!cliente) {
-      throw new Error("Cliente não foi encontrado");
-    }
     return cliente;
   }
 

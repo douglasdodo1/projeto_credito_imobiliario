@@ -4,14 +4,20 @@ import {
   SolicitacaoFinanceamentoSaidaDto,
 } from "../dtos/solicitacaoFinanceamento.dto";
 import { SolicitacaoFinanceamentoRepository } from "../repository/solicitacaoFinanceamentoRepository";
+import { SolicitacaoFinanceamentoValidator } from "../validations/solicitacaoFinanceamentoValidator";
 
 export class SolicitacaoFinanceamentoService {
-  private solicitacaoFinanceamentoRepository = new SolicitacaoFinanceamentoRepository();
+  private solicitacaoFinanceamentoRepository: SolicitacaoFinanceamentoRepository =
+    new SolicitacaoFinanceamentoRepository();
+  private solicitacaoFinanceamentoValidator: SolicitacaoFinanceamentoValidator =
+    new SolicitacaoFinanceamentoValidator();
 
   async criar(solicitacao: SolicitacaoFinanceamentoEntradaDto): Promise<SolicitacaoFinanceamentoSaidaDto> {
     if (!solicitacao) {
       throw new Error("Solicitação de financiamento não pode ser vazia");
     }
+
+    await this.solicitacaoFinanceamentoValidator.verificarSolicitacaoValida(solicitacao);
 
     const solicitacaoCriada = await this.solicitacaoFinanceamentoRepository.criar(solicitacao);
     return solicitacaoCriada;

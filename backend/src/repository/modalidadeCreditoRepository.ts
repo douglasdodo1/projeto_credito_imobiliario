@@ -1,5 +1,6 @@
 import { ModalidadeCreditoDto } from "../dtos/modalidadeCredito.dto";
 import prisma from "../creditoImobiliarioDB";
+import { ModalidadeCredito } from "../../generated/prisma";
 
 export class ModalidadeCreditoRepository {
   async criar(modalidadeCredito: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
@@ -24,6 +25,14 @@ export class ModalidadeCreditoRepository {
     };
 
     return result;
+  }
+
+  async buscarPorId(id: number): Promise<ModalidadeCreditoDto> {
+    const modadelidadeCredito: ModalidadeCredito | null = await prisma.modalidadeCredito.findUnique({
+      where: { id: id },
+    });
+
+    return modadelidadeCredito as ModalidadeCreditoDto;
   }
 
   async buscarTodas(): Promise<ModalidadeCreditoDto[]> {

@@ -1,3 +1,4 @@
+import { LinhaFinanceamento } from "../../generated/prisma";
 import prisma from "../creditoImobiliarioDB";
 import { LinhaFinanceamentoDto } from "../dtos/linhaFinanceamento.dto";
 
@@ -10,6 +11,14 @@ export class LinhaFinanceamentoRepository {
       },
     });
     return linhaFinanceamentoCriada;
+  }
+
+  async buscarPorId(id: number): Promise<LinhaFinanceamentoDto> {
+    const linhaFinanceamento: LinhaFinanceamentoDto | null = await prisma.linhaFinanceamento.findUnique({
+      where: { id: id },
+    });
+
+    return linhaFinanceamento as LinhaFinanceamentoDto;
   }
 
   async buscarTodas(): Promise<LinhaFinanceamentoDto[]> {

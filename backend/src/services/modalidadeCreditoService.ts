@@ -3,8 +3,8 @@ import { ModalidadeCreditoRepository } from "../repository/modalidadeCreditoRepo
 import { ModalidadeCreditoValidator } from "../validations/modalidadeCreditoValidator";
 
 export class ModalidadeCreditoService {
-  modalidadeCreditoRepository: ModalidadeCreditoRepository = new ModalidadeCreditoRepository();
-  modalidadeCreditoValidator: ModalidadeCreditoValidator = new ModalidadeCreditoValidator(true);
+  private modalidadeCreditoRepository: ModalidadeCreditoRepository = new ModalidadeCreditoRepository();
+  private modalidadeCreditoValidator: ModalidadeCreditoValidator = new ModalidadeCreditoValidator(true);
 
   async criar(modalidadeCredito: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
     await this.modalidadeCreditoValidator.verificarModalidadeCreditoValida(modalidadeCredito);
@@ -12,6 +12,14 @@ export class ModalidadeCreditoService {
       modalidadeCredito
     );
     return modalidadeCreditoCriada;
+  }
+
+  async buscarPorId(id: number): Promise<ModalidadeCreditoDto> {
+    const modadelidadeCredito: ModalidadeCreditoDto = await this.modalidadeCreditoRepository.buscarPorId(id);
+    if (!modadelidadeCredito) {
+      throw new Error("modalidade de crédito não encontrada");
+    }
+    return modadelidadeCredito;
   }
 
   async buscarTodas(): Promise<ModalidadeCreditoDto[]> {

@@ -5,15 +5,16 @@ import { ClienteRepository } from "../repository/clienteRepository";
 import { ClienteValidator } from "../validations/clienteValidator";
 
 export class ClienteService {
-  clienteRepository: ClienteRepository = new ClienteRepository();
-  clienteValidator: ClienteValidator = new ClienteValidator(true);
+  private clienteRepository: ClienteRepository = new ClienteRepository();
+  private clienteValidator: ClienteValidator = new ClienteValidator(true);
 
   async criar(cliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
-    if (cliente == null) {
-      throw new Error("Cliente não pode ser nulo.");
+    await this.clienteValidator.verificarClienteValido(cliente);
+    const verificarExistencia: ClienteSaidaDto = await this.buscarPorCpf(cliente.cpf);
+    if (verificarExistencia) {
+      throw new Error("Usuário já registrado");
     }
 
-    await this.clienteValidator.verificarClienteValido(cliente);
     const clienteCriado: ClienteSaidaDto = await this.clienteRepository.criar(cliente);
     return clienteCriado;
   }
@@ -21,7 +22,7 @@ export class ClienteService {
   async buscarPorCpf(cpf: string): Promise<ClienteSaidaDto> {
     const cliente: ClienteSaidaDto | null = await this.clienteRepository.buscarPorCpf(cpf);
 
-    if (cliente == null) {
+    if (!cliente) {
       throw new Error("Cliente não encontrado");
     }
 

@@ -1,4 +1,4 @@
-import { ClientEntradaDto, ClienteSaidaDto } from "./cliente.dto";
+import { ClienteSaidaDto } from "./cliente.dto";
 import { LinhaFinanceamentoDto } from "./linhaFinanceamento.dto";
 import { ModalidadeCreditoDto } from "./modalidadeCredito.dto";
 
