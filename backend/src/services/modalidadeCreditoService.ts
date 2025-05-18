@@ -4,7 +4,7 @@ import { ModalidadeCreditoValidator } from "../validations/modalidadeCreditoVali
 
 export class ModalidadeCreditoService {
   modalidadeCreditoRepository: ModalidadeCreditoRepository = new ModalidadeCreditoRepository();
-  modalidadeCreditoValidator: ModalidadeCreditoValidator = new ModalidadeCreditoValidator(false);
+  modalidadeCreditoValidator: ModalidadeCreditoValidator = new ModalidadeCreditoValidator(true);
 
   async criar(modalidadeCredito: ModalidadeCreditoDto): Promise<ModalidadeCreditoDto> {
     await this.modalidadeCreditoValidator.verificarModalidadeCreditoValida(modalidadeCredito);

@@ -1,13 +1,13 @@
 import { LinhaFinanceamentoDto } from "../dtos/linhaFinanceamento.dto";
 import { LinhaFinanceamentoRepository } from "../repository/linhaFinanceamentoRepository";
+import { LinhaFinanceamentoValidator } from "../validations/linhaFinanceamentoValidator";
 
 export class LinhaFinanceamentoService {
   linhaFinanceamentoRepository: LinhaFinanceamentoRepository = new LinhaFinanceamentoRepository();
+  linhaFinanceamentoValidator: LinhaFinanceamentoValidator = new LinhaFinanceamentoValidator(true);
 
   async criar(linhaFinanceamento: Required<LinhaFinanceamentoDto>): Promise<LinhaFinanceamentoDto> {
-    if (linhaFinanceamento == null) {
-      throw new Error("linha de financamento está vazia");
-    }
+    await this.linhaFinanceamentoValidator.verificarLinhaFinanceamentoValido(linhaFinanceamento);
     const linhaFinanceamentoCriada: LinhaFinanceamentoDto = await this.linhaFinanceamentoRepository.criar(
       linhaFinanceamento
     );
@@ -20,10 +20,7 @@ export class LinhaFinanceamentoService {
   }
 
   async atualizar(id: number, alteracoesLinhaFinanceamento: LinhaFinanceamentoDto): Promise<LinhaFinanceamentoDto> {
-    if (!alteracoesLinhaFinanceamento) {
-      throw new Error("nenhuma alteração detectada");
-    }
-
+    await this.linhaFinanceamentoValidator.verificarLinhaFinanceamentoUpdate(alteracoesLinhaFinanceamento);
     const linhaFinanceamentoAtualizada: LinhaFinanceamentoDto = await this.linhaFinanceamentoRepository.atualizar(
       id,
       alteracoesLinhaFinanceamento

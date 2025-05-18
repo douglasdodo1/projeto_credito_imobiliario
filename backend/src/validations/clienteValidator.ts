@@ -17,7 +17,7 @@ export class ClienteValidator {
         this.erros.push(new Error(`Campo obrigatório ausente: '${campo}'`));
       }
 
-      if (this.erros.length === 0 && !this.isteste) {
+      if (this.erros.length === 0) {
         if (!(await this.verificarCpfValido(cliente.cpf!))) {
           this.erros.push(new Error(`CPF inválido: '${cliente.cpf}'`));
         }

@@ -6,7 +6,7 @@ import { ClienteValidator } from "../validations/clienteValidator";
 
 export class ClienteService {
   clienteRepository: ClienteRepository = new ClienteRepository();
-  clienteValidator: ClienteValidator = new ClienteValidator(false);
+  clienteValidator: ClienteValidator = new ClienteValidator(true);
 
   async criar(cliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
     if (cliente == null) {

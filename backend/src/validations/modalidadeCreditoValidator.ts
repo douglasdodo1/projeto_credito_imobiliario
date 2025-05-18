@@ -8,18 +8,15 @@ export class ModalidadeCreditoValidator {
     this.isteste = teste;
   }
 
-  // validação para CREATE
   async verificarModalidadeCreditoValida(mod: Partial<ModalidadeCreditoDto>) {
     this.erros = [];
 
     if (!this.isteste) {
-      // 1) campos obrigatórios
       const camposFaltando = this.verificarCamposObrigatorios(mod);
       for (const campo of camposFaltando) {
         this.erros.push(new Error(`Campo obrigatório ausente: '${campo}'`));
       }
 
-      // 2) validações de negócio
       if (this.erros.length === 0) {
         if (!mod.nome || mod.nome.trim().length === 0) {
           this.erros.push(new Error(`Nome inválido: '${mod.nome}'`));
@@ -44,19 +41,15 @@ export class ModalidadeCreditoValidator {
         }
       }
 
-      // 3) lança o erro enriquecido para o errorHandler
       if (this.erros.length > 0) {
         const error = new Error("Erros de validação");
-        // informa ao middleware qual status retornar
         (error as any).statusCode = 400;
-        // detalhes aparecerão no Postman
         (error as any).details = this.erros.map((e) => e.message);
         throw error;
       }
     }
   }
 
-  // campos que sempre devem vir no body
   private verificarCamposObrigatorios(mod: Partial<ModalidadeCreditoDto>): string[] {
     if (this.isteste) return [];
     const faltando: string[] = [];
@@ -68,7 +61,6 @@ export class ModalidadeCreditoValidator {
     return faltando;
   }
 
-  // validação para UPDATE parcial
   async verificarModalidadeCreditoUpdate(mod: Partial<ModalidadeCreditoDto>) {
     this.erros = [];
 
