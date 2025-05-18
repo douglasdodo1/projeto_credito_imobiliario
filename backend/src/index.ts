@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
-import { clienteDto } from "./dtos/cliente.dto";
 import { FiltroClienteDto } from "./dtos/filtroCliente.dto";
 import { ModalidadeCreditoDto } from "./dtos/modalidadeCredito.dto";
 import { ClienteService } from "./services/clienteService";
 import { ModalidadeCreditoService } from "./services/modalidadeCreditoService";
 import { LinhaFinanceamentoDto } from "./dtos/linhaFinanceamento.dto";
 import { LinhaFinanceamentoService } from "./services/linhaFinanceamentoService";
+import { ClienteInputDto, ClienteOutputDto } from "./dtos/cliente.dto";
 
 const app = express();
 const PORT = 3000;
@@ -21,8 +21,8 @@ app.get("/", (req: Request, res: Response) => {
 
 //CLIENTE
 app.post("/clientes", async (req: Request, res: Response) => {
-  const cliente: clienteDto = req.body;
-  const clienteCriado: clienteDto = await clienteService.criarCliente(cliente);
+  const cliente: ClienteInputDto = req.body;
+  const clienteCriado: ClienteOutputDto = await clienteService.criarCliente(cliente);
   res.json(clienteCriado);
 });
 
@@ -34,17 +34,18 @@ app.get("/clientes", async (req: Request, res: Response) => {
     rendaMax: req.query.rendaMax ? Number(req.query.rendaMax) : undefined,
   };
 
-  const listaCliente: clienteDto[] = await clienteService.buscarClientes(filtros);
+  const listaCliente: ClienteOutputDto[] = await clienteService.buscarClientes(filtros);
   res.json(listaCliente);
 });
 
 app.put("/clientes/:cpf", async (req: Request, res: Response) => {
   const cpf: string = req.params.cpf;
-  const alteracoesCliente: clienteDto = req.body;
-  const clienteAtualizado: clienteDto = await clienteService.atualizarCliente(cpf, alteracoesCliente);
+  const alteracoesCliente: ClienteInputDto = req.body;
+  const clienteAtualizado: ClienteOutputDto = await clienteService.atualizarCliente(cpf, alteracoesCliente);
   res.send(clienteAtualizado);
 });
 //FIM CLIENTE
+
 
 //MODALIDADE DE CRÉDITO
 app.post("/modalidades-credito", async (req: Request, res: Response) => {

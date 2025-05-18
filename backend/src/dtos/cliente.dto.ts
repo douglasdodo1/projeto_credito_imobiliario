@@ -1,12 +1,18 @@
-import { SolicitacaoCredito } from "../../generated/prisma";
-import { TelefoneDto } from "./telefone.dto";
+// clienteInput.dto.ts
+export interface ClienteInputDto {
+  cpf: string;
+  tipo: string;
+  nome: string;
+  idade: number;
+  renda: number;
+  Telefones: { numero: string }[];
+}
 
-export interface clienteDto {
-  cpf?: string;
-  tipo?: string;
-  nome?: string;
-  idade?: number;
-  renda?: number;
-  Telefones?: TelefoneDto[];
-  solicitacoesCreditoId?: number[];
+// clienteOutput.dto.ts
+export interface ClienteOutputDto {
+  tipo: string;
+  nome: string;
+  idade: number;
+  renda: number;
+  Telefones?: { numero: string }[];
 }

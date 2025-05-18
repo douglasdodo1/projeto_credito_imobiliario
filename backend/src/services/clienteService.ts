@@ -1,21 +1,21 @@
 import { Cliente, Prisma } from "../../generated/prisma";
-import { clienteDto as ClienteDto } from "../dtos/cliente.dto";
+import { ClienteInputDto, ClienteOutputDto } from "../dtos/cliente.dto";
 import { FiltroClienteDto } from "../dtos/filtroCliente.dto";
 import { ClienteRepository } from "../repository/clienteRepository";
 
 export class ClienteService {
   clienteRepository: ClienteRepository = new ClienteRepository();
 
-  async criarCliente(cliente: ClienteDto): Promise<ClienteDto> {
+  async criarCliente(cliente: ClienteInputDto): Promise<ClienteOutputDto> {
     if (cliente == null) {
       throw new Error("Cliente não pode ser nulo.");
     }
-    const clienteCriado: ClienteDto = await this.clienteRepository.criarCliente(cliente);
+    const clienteCriado: ClienteOutputDto = await this.clienteRepository.criarCliente(cliente);
     return clienteCriado;
   }
 
-  async buscarPorCpf(cpf: string): Promise<ClienteDto> {
-    const cliente: ClienteDto | null = await this.clienteRepository.buscarPorCpf(cpf);
+  async buscarPorCpf(cpf: string): Promise<ClienteOutputDto> {
+    const cliente: ClienteOutputDto | null = await this.clienteRepository.buscarPorCpf(cpf);
 
     if (cliente == null) {
       throw new Error("Cliente não encontrado");
@@ -24,7 +24,7 @@ export class ClienteService {
     return cliente;
   }
 
-  async buscarClientes(filtros?: FiltroClienteDto): Promise<ClienteDto[]> {
+  async buscarClientes(filtros?: FiltroClienteDto): Promise<ClienteOutputDto[]> {
     const where: Prisma.ClienteWhereInput = {};
     if (filtros) {
       if (filtros.idadeMin !== undefined || filtros.idadeMax !== undefined) {
@@ -40,13 +40,12 @@ export class ClienteService {
         }
       }
     }
-    const listaClientes: ClienteDto[] = await this.clienteRepository.buscarClientes(where);
+    const listaClientes: ClienteOutputDto[] = await this.clienteRepository.buscarClientes(where);
     return listaClientes;
   }
 
-  async atualizarCliente(cpf: string, alteracoesCliente: ClienteDto): Promise<ClienteDto> {
-    console.log("AQUI");
-    const clienteAtualizado: ClienteDto = await this.clienteRepository.atualizarCliente(cpf, alteracoesCliente);
+  async atualizarCliente(cpf: string, alteracoesCliente: ClienteInputDto): Promise<ClienteOutputDto> {
+    const clienteAtualizado: ClienteOutputDto = await this.clienteRepository.atualizarCliente(cpf, alteracoesCliente);
 
     console.log(clienteAtualizado);
     return clienteAtualizado;

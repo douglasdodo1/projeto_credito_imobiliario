@@ -1,32 +1,20 @@
 import prisma from "../creditoImobiliarioDB";
-import { clienteDto } from "../dtos/cliente.dto";
-import { Prisma } from "../../generated/prisma";
+import { Prisma, Telefone } from "../../generated/prisma";
+import { ClienteInputDto, ClienteOutputDto } from "../dtos/cliente.dto";
+import { TelefoneDto } from "../dtos/telefone.dto";
 
 export class ClienteRepository {
-  async criarCliente(cliente: clienteDto): Promise<clienteDto> {
-    if (!cliente.cpf) {
-      throw new Error("CPF é obrigatório.");
-    }
-    if (!cliente.nome) {
-      throw new Error("nome é obrigatório");
-    }
-    if (!cliente.idade) {
-      throw new Error("idade é obrigatória");
-    }
-    if (!cliente.renda) {
-      throw new Error("renda é obrigatória");
-    }
-
+  async criarCliente(cliente: ClienteInputDto): Promise<ClienteOutputDto> {
     await prisma.cliente.create({
       data: {
         cpf: cliente.cpf,
-        tipo: cliente.tipo ?? "",
+        tipo: cliente.tipo,
         nome: cliente.nome,
         idade: cliente.idade,
         renda: cliente.renda,
         Telefones: {
           create: cliente.Telefones?.map((telefone) => ({
-            numero: telefone?.numero,
+            numero: telefone.numero,
           })),
         },
       },
@@ -45,18 +33,21 @@ export class ClienteRepository {
     };
   }
 
-  async buscarPorCpf(cpf: string): Promise<clienteDto | null> {
-    const cliente: clienteDto | null = await prisma.cliente.findUnique({
+  async buscarPorCpf(cpf: string): Promise<ClienteOutputDto | null> {
+    const cliente: ClienteOutputDto | null = await prisma.cliente.findUnique({
       where: { cpf: cpf },
       include: {
         Telefones: true,
       },
     });
+    if (!cliente) {
+      throw new Error("Cliente não foi encontrado");
+    }
     return cliente;
   }
 
-  async buscarClientes(where?: Prisma.ClienteWhereInput): Promise<clienteDto[]> {
-    const listaClientes: clienteDto[] = await prisma.cliente.findMany({
+  async buscarClientes(where?: Prisma.ClienteWhereInput): Promise<ClienteOutputDto[]> {
+    const listaClientes: ClienteOutputDto[] = await prisma.cliente.findMany({
       select: {
         cpf: true,
         tipo: true,
@@ -75,7 +66,7 @@ export class ClienteRepository {
     return listaClientes;
   }
 
-  async atualizarCliente(cpf: string, alteracoesCliente: clienteDto): Promise<clienteDto> {
+  async atualizarCliente(cpf: string, alteracoesCliente: ClienteInputDto): Promise<ClienteOutputDto> {
     const { Telefones, ...dadosCliente } = alteracoesCliente;
 
     const clienteAtualizado = await prisma.cliente.update({
