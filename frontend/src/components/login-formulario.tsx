@@ -11,7 +11,7 @@ import { Form as ShadcnForm, FormControl, FormField, FormItem, FormLabel, FormMe
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ClientEntradaDto } from "../dtos/cliente.dto";
+import { ClientEntradaDto } from "@/app/dtos/cliente.dto";
 
 const loginSchema = z.object({
   cpf: z.string().min(11, "CPF deve ter pelo menos 11 dígitos").regex(/^\d+$/, "CPF deve conter apenas números"),
@@ -20,7 +20,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 interface LoginFormularioProps {
-  onLoginSuccess: (cpf: string, tipo: string) => void;
+  onLoginSuccess: (cpf: string, tipo: string, nome: string) => void;
 }
 
 export default function LoginFormulario({ onLoginSuccess }: LoginFormularioProps) {
@@ -32,21 +32,26 @@ export default function LoginFormulario({ onLoginSuccess }: LoginFormularioProps
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    console.log("submit disparado com:", values);
     try {
       const { data: cliente } = await axios.get<ClientEntradaDto>(`http://localhost:3000/clientes/${values.cpf}`);
+
       if (!cliente) {
         form.setError("cpf", { message: "CPF não encontrado." });
         return;
       }
+
       if (cliente.tipo !== "cliente" && cliente.tipo !== "adm") {
         form.setError("cpf", { message: "Tipo inválido." });
         return;
       }
-      onLoginSuccess(cliente.cpf, cliente.tipo);
+
+      // Chama a função passada via prop para tratar o login com sucesso
+      onLoginSuccess(cliente.cpf, cliente.tipo, cliente.nome);
     } catch (err) {
       console.error("Erro na requisição:", err);
-      form.setError("cpf", { message: "Erro ao tentar logar. Verifique o CPF." });
+      form.setError("cpf", {
+        message: "Erro ao tentar logar. Verifique o CPF.",
+      });
     }
   };
 
@@ -81,8 +86,8 @@ export default function LoginFormulario({ onLoginSuccess }: LoginFormularioProps
           className={cn(
             "w-full font-semibold transition-colors",
             theme === "dark"
-              ? "bg-blue-400 hover:bg-blue-500 text-gray-900" // azul mais claro no escuro, texto escuro para contraste
-              : "bg-blue-700 hover:bg-blue-800 text-white" // azul forte no claro, texto branco para contraste
+              ? "bg-blue-400 hover:bg-blue-500 text-gray-900"
+              : "bg-blue-700 hover:bg-blue-800 text-white"
           )}
         >
           Entrar

@@ -1,23 +1,31 @@
 "use client";
-
-import { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
+import CadastroFormulario from "@/components/cadastroFormulario";
+import LoginFormulario from "@/components/login-formulario";
 import { Button } from "@/components/ui/button";
-import LoginFormulario from "./components/login-formulario";
-import CadastroFormulario from "./components/cadastroFormulario";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function HomePage() {
   const [mode, setMode] = useState<"login" | "register">("login");
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
 
-  // Evita mismatch SSR/CSR
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null; // só renderiza depois que montar
+  if (!mounted) return null;
+
+  const handleLoginSuccess = (cpf: string, tipo: string, nome: string) => {
+    localStorage.setItem("cpf", cpf);
+    localStorage.setItem("tipo", tipo);
+    localStorage.setItem("nome", nome);
+
+    router.push("/dashboard");
+  };
 
   return (
     <main
@@ -60,15 +68,7 @@ export default function HomePage() {
         </div>
 
         <div className="mt-4">
-          {mode === "login" ? (
-            <LoginFormulario
-              onLoginSuccess={(cpf, tipo) => {
-                console.log("Login realizado:", cpf, tipo);
-              }}
-            />
-          ) : (
-            <CadastroFormulario />
-          )}
+          {mode === "login" ? <LoginFormulario onLoginSuccess={handleLoginSuccess} /> : <CadastroFormulario />}
         </div>
       </div>
     </main>

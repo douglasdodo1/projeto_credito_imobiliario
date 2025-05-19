@@ -10,7 +10,7 @@ export class ClienteService {
 
   async criar(cliente: ClientEntradaDto): Promise<ClienteSaidaDto> {
     await this.clienteValidator.verificarClienteValido(cliente);
-    const verificarExistencia: ClienteSaidaDto = await this.buscarPorCpf(cliente.cpf);
+    const verificarExistencia: ClienteSaidaDto | null = await this.clienteRepository.buscarPorCpf(cliente.cpf);
     if (verificarExistencia) {
       throw new Error("Usuário já registrado");
     }

@@ -13,12 +13,14 @@
   "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^6.8.2",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "prisma": "^6.8.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.18",
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.18",
     "@types/swagger-jsdoc": "^6.0.4",

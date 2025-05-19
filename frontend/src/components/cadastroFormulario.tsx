@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import axios from "axios";
-import { ClientEntradaDto } from "../dtos/cliente.dto";
 
 import { useForm } from "react-hook-form";
 import { useTheme } from "next-themes";
@@ -12,6 +11,7 @@ import { Form, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { ClientEntradaDto } from "@/app/dtos/cliente.dto";
 
 export default function CadastroFormulario() {
   const [mensagem, setMensagem] = useState("");
