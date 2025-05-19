@@ -15,6 +15,7 @@ import {
 import { SolicitacaoFinanceamentoService } from "./services/solicitacaoFinanceamentoService";
 import { catchAsync } from "./utils/catchAsync";
 import { errorHandler } from "./middlewares/erroHandler";
+import cors from "cors";
 
 const app = express();
 const PORT = 3000;
@@ -25,6 +26,7 @@ const solicitacaoFinanceamentoService: SolicitacaoFinanceamentoService = new Sol
 
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(cors());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World");
@@ -34,6 +36,7 @@ app.get("/", (req: Request, res: Response) => {
 app.post(
   "/clientes",
   catchAsync(async (req: Request, res: Response) => {
+    console.log(req.body);
     const cliente: ClientEntradaDto = req.body;
     const clienteCriado: ClienteSaidaDto = await clienteService.criar(cliente);
     res.json(clienteCriado);
@@ -49,9 +52,20 @@ app.get(
       rendaMin: req.query.rendaMin ? Number(req.query.rendaMin) : undefined,
       rendaMax: req.query.rendaMax ? Number(req.query.rendaMax) : undefined,
     };
-
     const listaCliente: ClienteSaidaDto[] = await clienteService.buscarTodos(filtros);
     res.json(listaCliente);
+  })
+);
+
+app.get(
+  "/clientes/:cpf",
+  catchAsync(async (req: Request, res: Response) => {
+    const cpf: string = req.params.cpf;
+    console.log("AQUI");
+    console.log(cpf);
+
+    const cliente: ClienteSaidaDto = await clienteService.buscarPorCpf(cpf);
+    res.send(cliente);
   })
 );
 
@@ -61,6 +75,8 @@ app.put(
     const cpf: string = req.params.cpf;
     const alteracoesCliente: ClientEntradaDto = req.body;
     const clienteAtualizado: ClienteSaidaDto = await clienteService.atualizar(cpf, alteracoesCliente);
+    console.log(clienteAtualizado);
+
     res.send(clienteAtualizado);
   })
 );
