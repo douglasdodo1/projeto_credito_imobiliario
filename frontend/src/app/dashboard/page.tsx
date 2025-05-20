@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import LinhasFinanceamento from "@/components/linhas-financeamento";
 import ModalidadesCredito from "@/components/modalidades-credito"; // importe o componente
 import SolicitacoesCredito from "@/components/solicitacoes-credito";
+import EditarCliente from "@/components/clientes";
 
 type UserType = "cliente" | "adm";
 
@@ -126,6 +127,9 @@ export default function DashboardPage() {
 
         <TabsContent value="linhas">
           <LinhasFinanceamento />
+        </TabsContent>
+        <TabsContent value="clientes">
+          <EditarCliente />
         </TabsContent>
 
         <TabsContent value="solicitacoes">
