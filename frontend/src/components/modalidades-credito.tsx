@@ -142,16 +142,22 @@ export default function ModalidadesCredito() {
         <Table>
           <TableHeader className={tabelaCabecalhoClass}>
             <TableRow>
-              <TableHead className="py-3 px-3">Nome</TableHead>
-              <TableHead className="py-3 px-3">Tipo Juros</TableHead>
-              <TableHead className="py-3 px-3">Taxa Juros (%)</TableHead>
-              <TableHead className="py-3 px-3">Taxa Adm. (%)</TableHead>
-              <TableHead className="py-3 px-3">Idade Mín.</TableHead>
-              <TableHead className="py-3 px-3">Idade Máx.</TableHead>
-              <TableHead className="py-3 px-3">Renda Mín. (R$)</TableHead>
-              <TableHead className="py-3 px-3">Renda Máx. (R$)</TableHead>
-              <TableHead className="py-3 px-3">Prazo (anos)</TableHead>
-              <TableHead className="py-3 px-3">Ativo</TableHead>
+              {[
+                "Nome",
+                "Tipo Juros",
+                "Taxa Juros (%)",
+                "Taxa Adm. (%)",
+                "Idade Mín.",
+                "Idade Máx.",
+                "Renda Mín. (R$)",
+                "Renda Máx. (R$)",
+                "Prazo (anos)",
+                "Ativo",
+              ].map((header) => (
+                <TableHead key={header} className={cn("py-3 px-3", theme === "dark" ? "text-white" : "text-blue-900")}>
+                  {header}
+                </TableHead>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>

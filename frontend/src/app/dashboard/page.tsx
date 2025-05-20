@@ -7,6 +7,7 @@ import { ChevronRightIcon, HomeIcon, ListIcon, PlusCircleIcon } from "lucide-rea
 import { cn } from "@/lib/utils";
 import LinhasFinanceamento from "@/components/linhas-financeamento";
 import ModalidadesCredito from "@/components/modalidades-credito"; // importe o componente
+import SolicitacoesCredito from "@/components/solicitacoes-credito";
 
 type UserType = "cliente" | "adm";
 
@@ -128,14 +129,7 @@ export default function DashboardPage() {
         </TabsContent>
 
         <TabsContent value="solicitacoes">
-          <p
-            className={cn(
-              "text-center select-none transition-colors duration-300",
-              theme === "dark" ? "text-gray-400" : "text-gray-500"
-            )}
-          >
-            Em breve...
-          </p>
+          <SolicitacoesCredito />
         </TabsContent>
 
         {tipo === "adm" && (

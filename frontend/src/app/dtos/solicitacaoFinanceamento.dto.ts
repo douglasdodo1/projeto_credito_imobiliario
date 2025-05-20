@@ -9,7 +9,7 @@ export enum StatusSolicitacao {
 }
 
 export interface SolicitacaoFinanceamentoEntradaDto {
-  id: number;
+  id?: number;
   clienteCpf: string;
   status: StatusSolicitacao;
   modalidadeCreditoId: number;

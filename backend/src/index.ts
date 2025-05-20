@@ -178,7 +178,7 @@ app.patch(
   "/solicitacoes-financeamento/:id",
   catchAsync(async (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
-    const novoEstado: string = req.body;
+    const novoEstado: string = req.body.status;
     const solicitacaoAtualizada = await solicitacaoFinanceamentoService.atualizarEstado(id, novoEstado);
     res.json(solicitacaoAtualizada);
   })
