@@ -1,4 +1,4 @@
-O projeto trata de uma agência de crédito imobobiliário
+O projeto trata de uma agência de crédito imobiliário
 
 rode primeiro o back end e depois o front.
 
